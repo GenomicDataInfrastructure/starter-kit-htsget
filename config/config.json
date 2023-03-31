@@ -1,0 +1,29 @@
+{
+    "htsgetConfig": {
+      "props": {
+        "port": "3000",
+        "host": "http://localhost/",
+        "logFile": "/logs/htsget.log"
+      },
+      "reads": {
+        "enabled": true,
+        "dataSourceRegistry": {
+          "sources": [
+            {
+                "pattern": "^s3/(?P<accession>.*)$",
+                "path": "http://s3-archive:9000/archive/{accession}"
+            }
+          ]
+        },
+        "serviceInfo": {
+          "id": "org.ga4gh.htsget-reference.reads"
+        }
+      },
+      "variants": {
+        "enabled": false,
+        "serviceInfo": {
+          "id": "org.ga4gh.htsget-reference.variants"
+        }
+      }
+    }
+  }
