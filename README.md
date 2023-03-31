@@ -19,13 +19,9 @@ Once the loading is finished, you can access the minio S3 in the browser at `loc
 There are different ways to access the data uploaded in the minio S3. For this implementation, only the **full file download** is possible.
 
 ## Alternative 1: Download a file using samtools 
-In order to download the file using samtools, execute into the samtools container. You can either get the container id and replace it in this command
+In order to download the file using samtools, execute into the samtools container using:
 ```sh
-docker exec -it <samtools-container-id> /bin/bash
-```
-or run the following command:
-```sh
-docker exec -it $(docker container ls | grep samtools | awk '{print $1}') /bin/bash
+docker exec -it samtools /bin/bash
 ```
 
 ### In bam format
@@ -44,22 +40,9 @@ You should then be able to see the `NA12878_20k_b37.sam` on the folder you ran t
 
 ## Alternative 2: Download a file using the htsget client
 
-In order to download the file using samtools, execute into the samtools container. You can either get the container id and replace it in this command
+In order to download the file using htsget-client, execute into the htsget-client container using:
 ```sh
-docker exec -it <samtools-container-id> /bin/bash
-```
-or run the following command:
-```sh
-docker exec -it $(docker container ls | grep samtools | awk '{print $1}') /bin/bash
-```
-
-In order to download the file using samtools, execute into the htsget client container.
-```sh
-docker exec -it <htsget-client-container-id> /bin/bash
-```
-or run the following command:
-```sh
-docker exec -it $(docker container ls | grep htsget-client | awk '{print $1}') /bin/bash
+docker exec -it htsget-client /bin/bash
 ```
 then run
 ```sh
