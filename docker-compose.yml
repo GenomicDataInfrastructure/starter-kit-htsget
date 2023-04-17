@@ -24,15 +24,28 @@ services:
         condition: service_healthy
     restart: on-failure
     entrypoint: >
-      /bin/sh -c "
+      /bin/sh -c '
+
+      add() {
+        path="$$1"
+        name="$$2"
+        if mc stat "s3/archive/$$name" 2>/dev/null >&2;
+        then
+          printf "%s already exists in archive\n" "$$name" >&2
+          return;
+        fi;
+        curl -L "$$path" -o "/tmp/$$name";
+        mc cp "/tmp/$$name" "s3/archive/$$name";
+        mc anonymous set public s3/archive/$$name;
+      };
+
       /usr/bin/mc config host add s3 http://s3-archive:9000 access secretkey;
       /usr/bin/mc mb -p s3/archive;
-      /usr/bin/mc policy set public s3/archive;
-      /usr/bin/mc cp /data/* s3/archive/;
       /usr/bin/mc anonymous set public s3/archive/;
-      "
-    volumes:
-      - ./data:/data
+
+      add https://github.com/ga4gh/htsget-refserver/raw/main/data/gcp/gatk-test-data/wgs_bam/NA12878.bam NA12878.bam;
+      add https://github.com/ga4gh/htsget-refserver/raw/main/data/gcp/gatk-test-data/wgs_bam/NA12878.bai NA12878.bam.bai;
+      '
 
   server:
     image: ga4gh/htsget-refserver:1.5.1
