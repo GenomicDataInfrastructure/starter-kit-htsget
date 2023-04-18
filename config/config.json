@@ -2,7 +2,7 @@
     "htsgetConfig": {
       "props": {
         "port": "3000",
-        "host": "http://localhost/",
+        "host": "http://localhost:3000/",
         "logFile": "/logs/htsget.log"
       },
       "reads": {
