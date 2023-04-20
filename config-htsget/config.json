@@ -1,0 +1,37 @@
+{
+  "htsgetConfig": {
+    "props": {
+      "port": "3000",
+      "host": "http://localhost/",
+      "logFile": "/logs/htsget.log"
+    },
+    "reads": {
+      "enabled": true,
+      "dataSourceRegistry": {
+        "sources": [
+          {
+            "pattern": "^local/(?P<accession>.*)$",
+            "path": "/usr/src/app/data/gcp/gatk-test-data/{accession}.bam"
+          },
+          {
+            "pattern": "^s3/(?P<accession>.*)$",
+            "path": "http://download:8443/s3/{accession}"
+          },
+          {
+            "pattern": "^pub/(?P<accession>.*)$",
+            "path": "http://s3public:9000/inbox/{accession}"
+          }
+        ]
+      },
+      "serviceInfo": {
+        "id": "org.ga4gh.htsget-reference.reads"
+      }
+    },
+    "variants": {
+      "enabled": true,
+      "serviceInfo": {
+        "id": "org.ga4gh.htsget-reference.variants"
+      }
+    }
+  }
+}
