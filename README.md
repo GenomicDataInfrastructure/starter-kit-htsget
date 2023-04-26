@@ -1,7 +1,7 @@
 # About htsget
 TODO: General description of htsget and why it is used in GDI
 
-The repository contains the implemenation for the GDI starter kit, as well as a demo that can be used for understanding the product. Both solutions are packaged in the `docker-compose-htsget.yml` file. The major difference between the two implementations, is that the demo one can run on it's own, while the starter kit version requires some of the other GDI products in order to be functional. 
+The repository contains the implemenation for the GDI starter kit, as well as a demo that can be used for understanding the product. Both solutions are packaged in the `docker-compose-htsget.yml` file. The major difference between the two implementations, is that the demo one can run on it's own, while the starter kit version requires some of the other GDI products in order to be functional.
 
 More details regarding that and the way to run the services can be found in the sections below. After deciding whether you would like to run the demo or starter kit version, follow the instructions on the respective section.
 
@@ -22,15 +22,16 @@ If you are interested in the commands used for extracting the data, you can chec
 ## Running the services - Starter kit version
 The htsget product of the starter kit depends on the storage-and-interfaces. Specifically, the data served has to be ingested and stored in the archive included in the [storage-and-interfaces repository](https://github.com/GenomicDataInfrastructure/starter-kit-storage-and-interfaces). Therefore, in order to test the implementation, the two docker compose files (the storage-and-interfaces and the htsget) need to be started together, so that they share the same network and the different containers have access between them.
 
-To start the services included in the docker compose files run
+To start the services, start the individual docker compose environments from their respective root directories:
 ```sh
-docker compose -f docker-compose.yml -f docker-compose-htsget.yml up -d
+starter-kit-storage-and-interfaces$ docker compose up -d
+starter-kit-htsget$ docker compose -f docker-compose-htsget.yml up -d
 ```
 
 The logs for the two docker compose files can be accessed using the following commands for storage-and-interfaces and htsget respectively
 ```sh
-docker logs -f docker-compose.yml -f
-docker logs -f docker-compose-htsget.yml -f
+starter-kit-storage-and-interfaces$ docker logs -f docker-compose.yml -f
+starter-kit-htsget$ docker logs -f docker-compose-htsget.yml -f
 ```
 
 ## Access data with htsget
@@ -68,20 +69,20 @@ export HTS_AUTH_LOCATION=token.txt
 ```
 2. Get the token from the OIDC endpoint by running
 ```sh
-echo $(curl -k -S https://oidc:8080/tokens | jq -r '.[0]') > token.txt
+curl -k -S https://dockerhost:8080/tokens | jq -r '.[0]' > token.txt
 ```
 3. Finally get the file using
 ```sh
-samtools view http://server:3000/reads/s3/<dataset_id>/<file_path>
+samtools view http://server:3000/reads/s3/<dataset_id>/<file_path_without_.c4gh>
 ```
 where `dataset_id` and `file_path` are the results from the query to the database.
 
 ### (Optional) Add data
-In case you do not have any data to ingest, there exists a [script](https://github.com/GenomicDataInfrastructure/starter-kit-storage-and-interfaces/blob/main/scripts/load_data.sh) that can load a very small sample dataset in the storage-and-interface repository, which can be executed using the same docker compose file. 
+In case you do not have any data to ingest, there exists a [script](https://github.com/GenomicDataInfrastructure/starter-kit-storage-and-interfaces/blob/main/scripts/load_data.sh) that can load a very small sample dataset in the storage-and-interface repository, which can be executed using the same docker compose file.
 
 To run the container executing this script run
 ```sh
 docker compose up data_loader
 ```
-Once the script is finished and the data should be loaded. 
+Once the script is finished and the data should be loaded.
 
