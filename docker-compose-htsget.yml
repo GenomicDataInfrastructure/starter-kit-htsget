@@ -16,6 +16,8 @@ services:
       - ./scripts/certs:/usr/local/share/ca-certificates
       - ./config-htsget:/config
       - ./logs:/logs
+    extra_hosts:
+    - dockerhost:host-gateway
 
   client:
     image: python:3.11-slim
@@ -29,6 +31,8 @@ services:
       - apt update; apt install -y curl;
         if ! which htsget >/dev/null; then pip install htsget; fi;
         while true; do sleep 250; done
+    extra_hosts:
+    - dockerhost:host-gateway
   
   samtools:
     image: staphb/samtools:1.17
@@ -41,6 +45,8 @@ services:
       - -c 
       - apt update; apt install -y curl jq;
         while true; do sleep 250; done
+    extra_hosts:
+    - dockerhost:host-gateway
   
   s3public:
     profiles: ["demo"]
@@ -112,10 +118,11 @@ services:
         export HTS_AUTH_LOCATION=token.txt;
         echo "some-token" > token.txt;
         apt update; apt install -y curl jq;
-        samtools view http://server:3000/reads/pub/NA12878.bam > NA12878.bam;
+        samtools view -b http://server:3000/reads/pub/NA12878.bam > NA12878.bam;
        exit 0;
     volumes:
       - ./output:/data
+
 volumes:
   s3pubdata:
 
