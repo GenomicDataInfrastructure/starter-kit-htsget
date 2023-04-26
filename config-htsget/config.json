@@ -15,7 +15,7 @@
           },
           {
             "pattern": "^s3/(?P<accession>.*)$",
-            "path": "http://download:8443/s3/{accession}"
+            "path": "http://dockerhost:8443/s3/{accession}"
           },
           {
             "pattern": "^pub/(?P<accession>.*)$",
