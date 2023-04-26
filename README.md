@@ -68,7 +68,7 @@ export HTS_AUTH_LOCATION=token.txt
 ```
 2. Get the token from the OIDC endpoint by running
 ```sh
-echo $(curl -k -S https://oidc:8080/tokens | jq '.[0]') > token.txt
+echo $(curl -k -S https://oidc:8080/tokens | jq -r '.[0]') > token.txt
 ```
 3. Finally get the file using
 ```sh
