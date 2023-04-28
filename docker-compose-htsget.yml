@@ -1,6 +1,6 @@
 services:
   server:
-    image: harbor.nbis.se/gdi/htsget-refserver:dev
+    image: harbor.nbis.se/gdi/htsget-refserver:0.1.0
     container_name: htsget-server
     command:
       - /usr/src/app/htsget-refserver
@@ -12,8 +12,14 @@ services:
     ports:
       - 3000:3000
     volumes:
-      #- certs:/etc/ssl/certs
-      - ./scripts/certs:/usr/local/share/ca-certificates
+      # If you want to start the docker compose without tls, remove the line below
+      # and the relevant configuration from the config-htsget/config.json file,
+      # which are the lines for serverCert and serverKey
+      # The TLS version assumes that this compose file is running along with the
+      # storage and interfaces.
+      # If you want to run the htsget with TLS but without the storage and interfaces,
+      # add the certificates in the volume below
+      - starter-kit-storage-and-interfaces_shared:/shared
       - ./config-htsget:/config
       - ./logs:/logs
     extra_hosts:
@@ -125,6 +131,8 @@ services:
 
 volumes:
   s3pubdata:
+  starter-kit-storage-and-interfaces_shared:
+    external: true
 
 networks:
   public:
