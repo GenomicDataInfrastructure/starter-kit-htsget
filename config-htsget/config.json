@@ -3,16 +3,12 @@
     "props": {
       "port": "3000",
       "host": "http://localhost/",
-      "logFile": "/logs/htsget.log"
+      "logLevel": "debug"
     },
     "reads": {
       "enabled": true,
       "dataSourceRegistry": {
         "sources": [
-          {
-            "pattern": "^local/(?P<accession>.*)$",
-            "path": "/usr/src/app/data/gcp/gatk-test-data/{accession}.bam"
-          },
           {
             "pattern": "^s3/(?P<accession>.*)$",
             "path": "http://dockerhost:8443/s3/{accession}"
