@@ -67,13 +67,14 @@ docker exec -it samtools-client bash
 export HTS_ALLOW_UNENCRYPTED_AUTHORIZATION_HEADER="I understand the risks"
 export HTS_AUTH_LOCATION=token.txt
 ```
+TODO: Write instructions about adding the ca and the CURL_CA_BUNDLE export for tls
 2. Get the token from the OIDC endpoint by running
 ```sh
 curl -k -S https://dockerhost:8080/tokens | jq -r '.[0]' > token.txt
 ```
 3. Finally get the file using
 ```sh
-samtools view http://server:3000/reads/s3/<dataset_id>/<file_path_without_.c4gh>
+samtools view http://server:3000/reads/s3/<dataset_id>/<file_path>
 ```
 where `dataset_id` and `file_path` are the results from the query to the database.
 
@@ -85,4 +86,8 @@ To run the container executing this script run
 docker compose up data_loader
 ```
 Once the script is finished and the data should be loaded.
+
+
+### TODO: TLS configuration
+If the htsget is not run with storage and interfaces, remove the external volume from the docker compose
 
