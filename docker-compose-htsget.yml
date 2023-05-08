@@ -102,7 +102,7 @@ services:
       /bin/sh -c "
       sleep 10;
       /usr/bin/mc -q config host add s3 http://s3public:9000 access secretkey;
-      /usr/bin/mc -q mb s3/inbox || true;
+      /usr/bin/mc -q mb s3/inbox;
       /usr/bin/mc anonymous set public s3/inbox;
       /usr/bin/mc cp /data/NA12878.bam s3/inbox/NA12878.bam;
       exit 0;
