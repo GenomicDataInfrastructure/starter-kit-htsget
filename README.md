@@ -82,11 +82,11 @@ curl -k -S https://dockerhost:8080/tokens | jq -r '.[0]' > token.txt
 ```
 3. Finally get the file using
 ```sh
-samtools view https://server:3000/reads/s3/<dataset_id>/<file_path>
+samtools view https://server:3000/reads/s3/<dataset_id>/<file_path_without.c4gh>
 ```
 where `dataset_id` and `file_path` are the results from the query to the database. For example, if you are using the data from the starter-kit-storage-and-interfaces repository, the command should be
 ```sh
-samtools view https://server:3000/reads/s3/EGAD74900000101/dummy_gdi.eu/NA12878.bam.c4gh
+samtools view https://server:3000/reads/s3/EGAD74900000101/dummy_gdi.eu/NA12878.bam
 ```
 
 ### (Optional) Add data
