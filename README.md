@@ -5,16 +5,17 @@ The repository contains the implemenation for the GDI starter kit, as well as a 
 
 More details regarding that and the way to run the services can be found in the sections below. After deciding whether you would like to run the demo or starter kit version, follow the instructions on the respective section.
 
-**Important Note:** The current implementation of the htsget server **does not** enable for partial retrieval of a file. Therefore, only full files should be requested. This feature will be developed in future versions of the product
+## Disclaimer
+**Important Note:** The current implementation of the htsget server **does not** enable for partial retrieval of a file. Therefore, only full files should be requested. This feature will be developed in future versions of the product.
 
 
 ## HTSGET Configuration
 The configuration for the htsget server should rely in the a folder called `config-htsget`. Detailed description of the configuration options can be found in the [reference implementation repository](https://github.com/ga4gh/htsget-refserver#setup---native).
 
 ## Running the services - Demo
-The demo profile of the docker compose, apart for the htsgetserver, contains a minio S3 that can be used as a storage backend and a data downloader that extracts a file in the `output` directory. Specifically, the S3 storage is being populated with the `NA12878.bam` file included in the `demo-data` folder of this repository. The data downloader is then setting the required environments variables and using the `samtools`, it makes a request to the `htsgest server`, which gives access to the requested file.
+The demo profile of the docker compose, apart for the htsget server, contains a minio S3 that can be used as a storage backend and a data downloader that extracts a file in the `output` directory. Specifically, the S3 storage is being populated with the `NA12878.bam` file included in the `demo-data` folder of this repository. The data downloader is then setting the required environments variables and using the `samtools`, it makes a request to the `htsgest server`, which gives access to the requested file.
 
-In order to run the demo version of the htsget, run
+In order to run the demo version of the htsget, first follow the instructions about removing tls at the bottom of this file and then run
 ```sh
 docker compose -f docker-compose-htsget.yml --profile demo up
 ```
@@ -33,8 +34,8 @@ starter-kit-htsget$ docker compose -f docker-compose-htsget.yml up -d
 
 The logs for the two docker compose files can be accessed using the following commands for storage-and-interfaces and htsget respectively
 ```sh
-starter-kit-storage-and-interfaces$ docker compose logs -f docker-compose.yml -f
-starter-kit-htsget$ docker compose logs -f docker-compose-htsget.yml -f
+starter-kit-storage-and-interfaces$ docker compose -f docker-compose.yml logs -f
+starter-kit-htsget$ docker compose -f docker-compose-htsget.yml logs -f
 ```
 
 ## Access data with htsget
@@ -70,7 +71,10 @@ docker exec -it samtools-client bash
 export HTS_ALLOW_UNENCRYPTED_AUTHORIZATION_HEADER="I understand the risks"
 export HTS_AUTH_LOCATION=token.txt
 ```
-TODO: Write instructions about adding the ca and the CURL_CA_BUNDLE export for tls
+If you are running the htsget server with TLS, you also need to point the `CURL_CA_BUNDLE` to the `ca.crt`. This can be done using
+```sh
+export CURL_CA_BUNDLE=/shared/cert/ca.crt
+```
 
 2. Get the token from the OIDC endpoint by running
 ```sh
@@ -78,22 +82,29 @@ curl -k -S https://dockerhost:8080/tokens | jq -r '.[0]' > token.txt
 ```
 3. Finally get the file using
 ```sh
-samtools view http://server:3000/reads/s3/<dataset_id>/<file_path>
+samtools view https://server:3000/reads/s3/<dataset_id>/<file_path>
 ```
-where `dataset_id` and `file_path` are the results from the query to the database.
+where `dataset_id` and `file_path` are the results from the query to the database. For example, if you are using the data from the starter-kit-storage-and-interfaces repository, the command should be
+```sh
+samtools view https://server:3000/reads/s3/EGAD74900000101/dummy_gdi.eu/NA12878.bam.c4gh
+```
 
 ### (Optional) Add data
 In case you do not have any data to ingest, there exists a [script](https://github.com/GenomicDataInfrastructure/starter-kit-storage-and-interfaces/blob/main/scripts/load_data.sh) that can load a very small sample dataset in the storage-and-interface repository, which can be executed using the same docker compose file.
 
 To run the container executing this script run
 ```sh
-docker compose up data_loader
+starter-kit-storage-and-interfaces$ docker compose up data_loader
 ```
 Once the script is finished and the data should be loaded.
 
 
-### TODO: TLS configuration
-If the htsget is not run with storage and interfaces, remove the external volume from the docker compose
+### TLS configuration
+In order to run the htsget with TLS enabled, the easiest way is to use the storage-and-interfaces docker compose, which creates the certificates, and point to the shared volume where they rely.
 
-
+If you want to start the docker compose without tls, 
+1. remove the line `- starter-kit-storage-and-interfaces_shared:/shared` from the docker-compose-htsget.yml.
+1. remove the `starter-kit-storage-and-interfaces_shared:` and `external: true` from the docker-compose-htsget.yml volumes.
+1. remove the `"serverCert": "/shared/cert/server.crt",` and `"serverKey": "/shared/cert/server.key"` configuration from the config-htsget/config.json file.
+1. remove the line `volumes:` and `- starter-kit-storage-and-interfaces_shared:/shared` lines from the samtools client service of the docker-compose-htsget.yml.
 
