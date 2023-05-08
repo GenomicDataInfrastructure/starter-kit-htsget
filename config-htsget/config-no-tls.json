@@ -3,9 +3,7 @@
       "props": {
         "port": "3000",
         "host": "http://localhost/",
-        "logLevel": "debug",
-        "serverCert": "/shared/cert/server.crt",
-        "serverKey": "/shared/cert/server.key"
+        "logLevel": "debug"
       },
       "reads": {
         "enabled": true,
@@ -26,7 +24,7 @@
         }
       },
       "variants": {
-        "enabled": true,
+        "enabled": false,
         "serviceInfo": {
           "id": "org.ga4gh.htsget-reference.variants"
         }
