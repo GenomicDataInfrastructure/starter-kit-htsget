@@ -1,9 +1,12 @@
 # About htsget
-TODO: General description of htsget and why it is used in GDI
+The htsget protocol was selected for the `Data Reception` part of the GDI starter kit. Htsget enables for retrieval of files from the storage-and-interfaces archive. The specification of the protocol can be found [here](http://samtools.github.io/hts-specs/htsget.html).
 
 The repository contains the implemenation for the GDI starter kit, as well as a demo that can be used for understanding the product. Both solutions are packaged in the `docker-compose-htsget.yml` file. The major difference between the two implementations, is that the demo one can run on it's own, while the starter kit version requires some of the other GDI products in order to be functional.
 
 More details regarding that and the way to run the services can be found in the sections below. After deciding whether you would like to run the demo or starter kit version, follow the instructions on the respective section.
+
+**Important Note:** The current implementation of the htsget server **does not** enable for partial retrieval of a file. Therefore, only full files should be requested. This feature will be developed in future versions of the product
+
 
 ## HTSGET Configuration
 The configuration for the htsget server should rely in the a folder called `config-htsget`. Detailed description of the configuration options can be found in the [reference implementation repository](https://github.com/ga4gh/htsget-refserver#setup---native).
@@ -30,8 +33,8 @@ starter-kit-htsget$ docker compose -f docker-compose-htsget.yml up -d
 
 The logs for the two docker compose files can be accessed using the following commands for storage-and-interfaces and htsget respectively
 ```sh
-starter-kit-storage-and-interfaces$ docker logs -f docker-compose.yml -f
-starter-kit-htsget$ docker logs -f docker-compose-htsget.yml -f
+starter-kit-storage-and-interfaces$ docker compose logs -f docker-compose.yml -f
+starter-kit-htsget$ docker compose logs -f docker-compose-htsget.yml -f
 ```
 
 ## Access data with htsget
@@ -68,6 +71,7 @@ export HTS_ALLOW_UNENCRYPTED_AUTHORIZATION_HEADER="I understand the risks"
 export HTS_AUTH_LOCATION=token.txt
 ```
 TODO: Write instructions about adding the ca and the CURL_CA_BUNDLE export for tls
+
 2. Get the token from the OIDC endpoint by running
 ```sh
 curl -k -S https://dockerhost:8080/tokens | jq -r '.[0]' > token.txt
@@ -90,4 +94,6 @@ Once the script is finished and the data should be loaded.
 
 ### TODO: TLS configuration
 If the htsget is not run with storage and interfaces, remove the external volume from the docker compose
+
+
 
