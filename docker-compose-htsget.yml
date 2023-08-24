@@ -14,14 +14,14 @@ services:
     volumes:
       # If you want to start the docker compose without tls, remove the line below,
       # remove the starter-kit-storage-and-interfaces_shared volume from the bottom
-      # of the file and the relevant configuration from the config-htsget/config.json 
+      # of the file and the relevant configuration from the config-htsget/examples/config.json
       # file, which are the lines for serverCert and serverKey.
       # The TLS version assumes that this compose file is running along with the
       # storage and interfaces.
       # If you want to run the htsget with TLS but without the storage and interfaces,
       # add the certificates in the volume below
       - starter-kit-storage-and-interfaces_shared:/shared
-      - ./config-htsget:/config
+      - ./config-htsget/examples:/config
       - ./logs:/logs
     extra_hosts:
     - dockerhost:host-gateway

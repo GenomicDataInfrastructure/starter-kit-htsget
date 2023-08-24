@@ -105,6 +105,6 @@ In order to run the htsget with TLS enabled, the easiest way is to use the stora
 If you want to start the docker compose without tls, 
 1. remove the line `- starter-kit-storage-and-interfaces_shared:/shared` from the docker-compose-htsget.yml.
 1. remove the `starter-kit-storage-and-interfaces_shared:` and `external: true` from the docker-compose-htsget.yml volumes.
-1. remove the `"serverCert": "/shared/cert/server.crt",` and `"serverKey": "/shared/cert/server.key"` configuration from the config-htsget/config.json file.
+1. remove the `"serverCert": "/shared/cert/server.crt",` and `"serverKey": "/shared/cert/server.key"` configuration from the config-htsget/examples/config.json file.
 1. remove the line `volumes:` and `- starter-kit-storage-and-interfaces_shared:/shared` lines from the samtools client service of the docker-compose-htsget.yml.
 
