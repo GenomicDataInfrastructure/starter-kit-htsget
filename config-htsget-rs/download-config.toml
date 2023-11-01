@@ -1,0 +1,15 @@
+data_server_addr = "0.0.0.0:8081"
+ticket_server_addr = "0.0.0.0:8080"
+ticket_server_cors_allow_origins = "All"
+ticket_server_cert = "/certs/fullchain.pem"
+ticket_server_key = "/certs/privkey.pem"
+
+[[resolvers]]
+regex = "(.*)"
+substitution_string = "$1"
+
+[resolvers.storage]
+forward_headers = true
+response_scheme = "http"
+url = "http://dockerhost:8443/s3/"
+response_url = "http://localhost:8443/s3/"
