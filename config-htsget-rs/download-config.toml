@@ -1,27 +1,21 @@
 ticket_server_addr = "0.0.0.0:8080"
 ticket_server_cors_allow_origins = "All"
-ticket_server_cert = "/certs/fullchain.pem"
-ticket_server_key = "/certs/privkey.pem"
 
 [[resolvers]]
 regex = "(.*)"
 substitution_string = "$1"
 
-# The keys are defining whether the data is encrypted or not
-#object_type.private_key = "/config/c4gh.sec.pem"
-#object_type.public_key = "/config/c4gh.pub.pem"
+[resolvers.object_type]
+send_encrypted_to_client = true
+private_key = "/config/server-rs.sec.pem"
+public_key = "/config/server-rs.pub.pem"
 
-# Send the headers back and forth
-storage.forward_headers = true
-response_scheme = "http"
-
-# The index file
-storage.endpoints.index = "http://dockerhost:8443/s3/"
-# Header and file url
-storage.endpoints.file = "http://dockerhost:8443/s3/"
-
+[resolvers.storage]
 # The url that will be used for the client's url
-storage.response_url = "http://localhost:8443/s3/"
+response_url = "http://localhost:8443/s3-enrcypted/"
+forward_headers = true
 
-# Not yet implemented, will allow to send encrypted or unencrypted data to the client
-# object_type.send_unencrypted_to_client = false
+[resolvers.storage.endpoints]
+index = "http://dockerhost:8443/s3/"
+# Header and file url
+file = "http://dockerhost:8443/s3-encrypted/"
