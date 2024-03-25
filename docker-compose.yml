@@ -10,16 +10,16 @@ services:
       - certs:/certs
 
   htsget:
-    image: harbor.nbis.se/gdi/htsget-rs:latest
+    image: harbor.nbis.se/gdi/htsget-rs:20240324
     command: ["htsget-actix", "--config", "/config/download-config.toml"]
     depends_on:
       certmaker:
         condition: service_completed_successfully
     ports:
       - 8088:8080
-    #environment:
-    #  - FORMATTING_STYLE=Pretty
-    #  - RUST_LOG=debug
+    environment:
+      - FORMATTING_STYLE=Pretty
+      - RUST_LOG=debug
     volumes:
       - ./config-htsget-rs:/config/
       - certs:/certs

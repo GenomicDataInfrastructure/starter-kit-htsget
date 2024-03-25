@@ -6,9 +6,9 @@ regex = "(.*)"
 substitution_string = "$1"
 
 [resolvers.object_type]
-send_encrypted_to_client = true
-private_key = "/config/server-rs.sec.pem"
-public_key = "/config/server-rs.pub.pem"
+send_encrypted_to_client = false
+#private_key = "/config/server-rs.sec.pem"
+#public_key = "/config/server-rs.pub.pem"
 
 [resolvers.storage]
 # The url that will be used for the client's url
