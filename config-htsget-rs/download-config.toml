@@ -1,0 +1,21 @@
+ticket_server_addr = "0.0.0.0:8080"
+ticket_server_cors_allow_origins = "All"
+
+[[resolvers]]
+regex = "(.*)"
+substitution_string = "$1"
+
+[resolvers.object_type]
+send_encrypted_to_client = false
+#private_key = "/config/server-rs.sec.pem"
+#public_key = "/config/server-rs.pub.pem"
+
+[resolvers.storage]
+# The url that will be used for the client's url
+response_url = "http://localhost:8443/s3-enrcypted/"
+forward_headers = true
+
+[resolvers.storage.endpoints]
+index = "http://dockerhost:8443/s3/"
+# Header and file url
+file = "http://dockerhost:8443/s3-encrypted/"
